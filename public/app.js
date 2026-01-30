@@ -1,13 +1,38 @@
-import { initAuth } from "../core/auth.js";
-import { loadUser } from "../core/user.js";
+const app = document.getElementById("app");
 
-const tg = window.Telegram.WebApp;
-tg.ready();
+const tgUser = getTelegramUser();
+if (!tgUser) {
+  app.innerHTML = "<h2>Открой приложение через Telegram</h2>";
+} else {
+  let user = loadUser() || registerUser(tgUser);
 
-document.getElementById("status").innerText =
-  tg.initDataUnsafe?.user
-    ? `Привет, ${tg.initDataUnsafe.user.first_name}`
-    : "Открыто вне Telegram";
+  if (!user.goal) {
+    renderGoalSelect();
+  } else {
+    renderDashboard();
+  }
+}
 
-initAuth();
-loadUser();
+function renderGoalSelect() {
+  app.innerHTML = "<h2>Выбери цель обучения</h2>";
+  GOALS.forEach(goal => {
+    const btn = document.createElement("button");
+    btn.textContent = goal.title;
+    btn.onclick = () => {
+      user.goal = goal.id;
+      user.modules = generateFreeModules(goal.id);
+      saveUser(user);
+      renderDashboard();
+    };
+    app.appendChild(btn);
+  });
+}
+
+function renderDashboard() {
+  app.innerHTML = `<h2>Привет, ${user.name}</h2><h3>Твои модули:</h3>`;
+  user.modules.forEach(m => {
+    const div = document.createElement("div");
+    div.textContent = "• " + m;
+    app.appendChild(div);
+  });
+}

@@ -1,28 +1,37 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>Promt Up</title>
-  <style>
-    body {
-      background: #0b1a2b;
-      color: white;
-      font-family: Arial;
-    }
-    button {
-      padding: 16px;
-      font-size: 18px;
-    }
-  </style>
-</head>
-<body>
-  <h1>Promt Up — LOADED</h1>
-  <button onclick="alert('HTML работает')">
-    Проверка
-  </button>
 
+  <!-- Mobile / Telegram -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1a2b" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <!-- ROOT -->
+  <div id="app">
+    <!-- fallback если JS не загрузился -->
+    <noscript>
+      <h1>Promt Up</h1>
+      <p>Для работы приложения требуется JavaScript</p>
+    </noscript>
+  </div>
+
+  <!-- Telegram Mini App API (безопасно, даже если не в TG) -->
   <script>
-    console.log("HTML SCRIPT WORKS");
+    if (window.Telegram && Telegram.WebApp) {
+      Telegram.WebApp.ready();
+      Telegram.WebApp.expand();
+    }
   </script>
+
+  <!-- MAIN APP SCRIPT -->
+  <!-- КРИТИЧНО: type="module" -->
+  <script type="module" src="./app.js"></script>
 </body>
 </html>

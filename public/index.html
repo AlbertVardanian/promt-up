@@ -1,37 +1,92 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
   <title>Promt Up</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <!-- Mobile / Telegram -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#0b1a2b" />
+  <style>
+    * { box-sizing: border-box; }
 
-  <!-- Styles -->
-  <link rel="stylesheet" href="./style.css" />
-</head>
-
-<body>
-  <!-- ROOT -->
-  <div id="app">
-    <!-- fallback если JS не загрузился -->
-    <noscript>
-      <h1>Promt Up</h1>
-      <p>Для работы приложения требуется JavaScript</p>
-    </noscript>
-  </div>
-
-  <!-- Telegram Mini App API (безопасно, даже если не в TG) -->
-  <script>
-    if (window.Telegram && Telegram.WebApp) {
-      Telegram.WebApp.ready();
-      Telegram.WebApp.expand();
+    body {
+      margin: 0;
+      background: #0b1a2b;
+      color: #ffffff;
+      font-family: Arial, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
-  </script>
 
-  <!-- MAIN APP SCRIPT -->
-  <!-- КРИТИЧНО: type="module" -->
-  <script type="module" src="./app.js"></script>
+    #app {
+      width: 100%;
+      max-width: 420px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      margin: 10px 0;
+      font-size: 16px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .primary {
+      background: #3b82f6;
+      color: white;
+    }
+
+    .secondary {
+      background: #1e293b;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div id="app"></div>
+
+<script>
+  const app = document.getElementById("app");
+
+  function startScreen() {
+    app.innerHTML = `
+      <h1>Promt Up</h1>
+      <p>Обучающая платформа по нейросетям</p>
+      <button class="primary" onclick="goalScreen()">Начать обучение</button>
+    `;
+  }
+
+  function goalScreen() {
+    app.innerHTML = `
+      <h1>Выбери цель</h1>
+      <button class="secondary" onclick="selectGoal('self')">Для себя</button>
+      <button class="secondary" onclick="selectGoal('business')">Для бизнеса</button>
+      <button class="secondary" onclick="selectGoal('work')">Для работы</button>
+      <button class="secondary" onclick="selectGoal('study')">Для учёбы</button>
+    `;
+  }
+
+  function selectGoal(goal) {
+    app.innerHTML = `
+      <h1>Цель выбрана</h1>
+      <p>${goal}</p>
+      <button class="primary" onclick="startScreen()">Назад</button>
+    `;
+  }
+
+  // ЗАПУСК
+  startScreen();
+</script>
+
 </body>
 </html>

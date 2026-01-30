@@ -1,28 +1,18 @@
 body {
   margin: 0;
-  background: #0b1c2d;
-  color: white;
   font-family: Arial, sans-serif;
+  background: #0b1a2b;
+  color: #ffffff;
 }
 
 #app {
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.screen {
-  text-align: center;
+  padding: 24px;
 }
 
 button {
-  margin-top: 12px;
-  padding: 12px 20px;
-  background: #1e90ff;
-  border: none;
-  border-radius: 8px;
-  color: white;
+  display: block;
+  margin: 12px 0;
+  padding: 12px;
   font-size: 16px;
   cursor: pointer;
 }

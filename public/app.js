@@ -1,59 +1,76 @@
-import { baseModules } from "../data/modules.base.js";
-import { targetModules } from "../data/modules.target.js";
-import { premiumModules } from "../data/modules.premium.js";
-import { extraModules } from "../data/modules.extra.js";
+import { baseModules } from "./data/modules.base.js";
+import { targetModules } from "./data/modules.target.js";
+import { premiumModules } from "./data/modules.premium.js";
+import { extraModules } from "./data/modules.extra.js";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const app = document.getElementById("app");
+const app = document.getElementById("app");
 
-  renderGoals();
+renderStart();
 
-  function renderGoals() {
-    app.innerHTML = `
-      <h2>Выбери цель</h2>
-      <button onclick="selectGoal('self')">Для себя</button>
-      <button onclick="selectGoal('business')">Для бизнеса</button>
-      <button onclick="selectGoal('work')">Для работы</button>
-      <button onclick="selectGoal('study')">Для учёбы</button>
-    `;
-  }
+function renderStart() {
+  app.innerHTML = `
+    <h1>Promt Up</h1>
+    <button id="startBtn">Начать обучение</button>
+  `;
 
-  window.selectGoal = goal => {
-    localStorage.setItem("goal", goal);
-    renderModules(goal);
-  };
+  document
+    .getElementById("startBtn")
+    .addEventListener("click", renderGoals);
+}
 
-  function renderModules(goal) {
-    app.innerHTML = `<h2>Модули обучения</h2>`;
+function renderGoals() {
+  app.innerHTML = `
+    <h2>Выбери цель</h2>
+    <div class="goals">
+      <button data-goal="self">Для себя</button>
+      <button data-goal="business">Для бизнеса</button>
+      <button data-goal="work">Для работы</button>
+      <button data-goal="study">Для учёбы</button>
+    </div>
+  `;
 
-    renderSection("Бесплатные — база", baseModules.map(m => m.title));
-    renderSection(
-      "Бесплатные — по цели",
-      targetModules[goal].map(m => m.title)
-    );
-    renderSection(
-      "Премиум",
-      premiumModules[goal],
-      true
-    );
-    renderSection(
-      "Дополнительные за монеты",
-      extraModules,
-      true
-    );
-  }
+  document.querySelectorAll("[data-goal]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const goal = btn.dataset.goal;
+      localStorage.setItem("goal", goal);
+      renderModules(goal);
+    });
+  });
+}
 
-  function renderSection(title, items, locked = false) {
-    app.innerHTML += `
-      <h3>${title}</h3>
-      <ul>
-        ${items
-          .map(
-            i =>
-              `<li>${i} ${locked ? "🔒" : ""}</li>`
-          )
-          .join("")}
-      </ul>
-    `;
-  }
-});
+function renderModules(goal) {
+  app.innerHTML = `<h2>Модули обучения</h2>`;
+
+  renderSection(
+    "Бесплатные — база",
+    baseModules.map(m => m.title)
+  );
+
+  renderSection(
+    "Бесплатные — по цели",
+    targetModules[goal].map(m => m.title)
+  );
+
+  renderSection(
+    "Премиум",
+    premiumModules[goal],
+    true
+  );
+
+  renderSection(
+    "Дополнительные за монеты",
+    extraModules,
+    true
+  );
+}
+
+function renderSection(title, items, locked = false) {
+  app.innerHTML += `
+    <h3>${title}</h3>
+    <ul>
+      ${items
+        .map(i => `<li>${i} ${locked ? "🔒" : ""}</li>`)
+        .join("")}
+    </ul>
+  `;
+}

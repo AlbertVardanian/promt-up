@@ -1,76 +1,54 @@
-import { baseModules } from "./data/modules.base.js";
-import { targetModules } from "./data/modules.target.js";
-import { premiumModules } from "./data/modules.premium.js";
-import { extraModules } from "./data/modules.extra.js";
-
 const app = document.getElementById("app");
 
-renderStart();
+/* ========= ЭКРАНЫ ========= */
 
-function renderStart() {
+function screenStart() {
   app.innerHTML = `
     <h1>Promt Up</h1>
-    <button id="startBtn">Начать обучение</button>
+    <p>Обучение нейросетям и промпт-инжинирингу</p>
+    <button class="primary" onclick="screenGoals()">Начать обучение</button>
   `;
-
-  document
-    .getElementById("startBtn")
-    .addEventListener("click", renderGoals);
 }
 
-function renderGoals() {
+function screenGoals() {
   app.innerHTML = `
-    <h2>Выбери цель</h2>
-    <div class="goals">
-      <button data-goal="self">Для себя</button>
-      <button data-goal="business">Для бизнеса</button>
-      <button data-goal="work">Для работы</button>
-      <button data-goal="study">Для учёбы</button>
-    </div>
+    <h1>Выбери цель</h1>
+    <button class="secondary" onclick="selectGoal('work')">Для работы</button>
+    <button class="secondary" onclick="selectGoal('business')">Для бизнеса</button>
+    <button class="secondary" onclick="selectGoal('study')">Для обучения</button>
+    <button class="secondary" onclick="selectGoal('self')">Для себя</button>
   `;
-
-  document.querySelectorAll("[data-goal]").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const goal = btn.dataset.goal;
-      localStorage.setItem("goal", goal);
-      renderModules(goal);
-    });
-  });
 }
 
-function renderModules(goal) {
-  app.innerHTML = `<h2>Модули обучения</h2>`;
-
-  renderSection(
-    "Бесплатные — база",
-    baseModules.map(m => m.title)
-  );
-
-  renderSection(
-    "Бесплатные — по цели",
-    targetModules[goal].map(m => m.title)
-  );
-
-  renderSection(
-    "Премиум",
-    premiumModules[goal],
-    true
-  );
-
-  renderSection(
-    "Дополнительные за монеты",
-    extraModules,
-    true
-  );
+function selectGoal(goal) {
+  localStorage.setItem("promtup_goal", goal);
+  screenModules();
 }
 
-function renderSection(title, items, locked = false) {
-  app.innerHTML += `
-    <h3>${title}</h3>
+function screenModules() {
+  const goal = localStorage.getItem("promtup_goal");
+
+  app.innerHTML = `
+    <h1>Модули обучения</h1>
+
+    <p><strong>Бесплатные основные</strong></p>
     <ul>
-      ${items
-        .map(i => `<li>${i} ${locked ? "🔒" : ""}</li>`)
-        .join("")}
+      <li>Основы нейросетей</li>
+      <li>Базовый промпт-инжиниринг</li>
+      <li>Универсальные сценарии AI</li>
     </ul>
+
+    <p><strong>Целевые модули (${goal})</strong></p>
+    <ul>
+      <li>AI под выбранную цель</li>
+      <li>Практика использования</li>
+      <li>Типовые задачи</li>
+    </ul>
+
+    <button class="primary" onclick="screenStart()">На главную</button>
   `;
 }
+
+/* ========= ЗАПУСК ========= */
+
+screenStart();

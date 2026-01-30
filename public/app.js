@@ -1,38 +1,38 @@
-const app = document.getElementById("app");
+document.addEventListener("DOMContentLoaded", () => {
+  const app = document.getElementById("app");
 
-const tgUser = getTelegramUser();
-if (!tgUser) {
-  app.innerHTML = "<h2>Открой приложение через Telegram</h2>";
-} else {
-  let user = loadUser() || registerUser(tgUser);
-
-  if (!user.goal) {
-    renderGoalSelect();
-  } else {
-    renderDashboard();
+  if (!app) {
+    console.error("❌ Контейнер #app не найден");
+    return;
   }
-}
 
-function renderGoalSelect() {
-  app.innerHTML = "<h2>Выбери цель обучения</h2>";
-  GOALS.forEach(goal => {
-    const btn = document.createElement("button");
-    btn.textContent = goal.title;
-    btn.onclick = () => {
-      user.goal = goal.id;
-      user.modules = generateFreeModules(goal.id);
-      saveUser(user);
-      renderDashboard();
-    };
-    app.appendChild(btn);
-  });
-}
+  // Telegram WebApp
+  const tg = window.Telegram?.WebApp;
+  if (tg) {
+    tg.ready();
+    tg.expand();
+  }
 
-function renderDashboard() {
-  app.innerHTML = `<h2>Привет, ${user.name}</h2><h3>Твои модули:</h3>`;
-  user.modules.forEach(m => {
-    const div = document.createElement("div");
-    div.textContent = "• " + m;
-    app.appendChild(div);
-  });
-}
+  // Стартовый экран
+  app.innerHTML = `
+    <div class="screen">
+      <h1>Promt Up 🚀</h1>
+      <p>Обучающая платформа по нейросетям</p>
+
+      <button id="startBtn">Начать обучение</button>
+    </div>
+  `;
+
+  document.getElementById("startBtn").onclick = () => {
+    app.innerHTML = `
+      <div class="screen">
+        <h2>Выбери цель</h2>
+
+        <button class="goal">Для себя</button>
+        <button class="goal">Для бизнеса</button>
+        <button class="goal">Для работы</button>
+        <button class="goal">Для учёбы</button>
+      </div>
+    `;
+  };
+});

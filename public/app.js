@@ -1,219 +1,248 @@
-// =====================
-// PROMT UP — MINI APP
-// =====================
+// app.js — ПОЛНЫЙ ФАЙЛ
 
-// ---- STATE ----
-let state = {
-  screen: "start", // start | goals | modules
-  goal: null
-};
-
-// ---- DATA ----
-
-// 3 бесплатных ОСНОВНЫХ (общие)
-const baseModules = [
-  { id: "o1", title: "Основы нейросетей" },
-  { id: "o2", title: "Базовый промпт-инжиниринг" },
-  { id: "o3", title: "Универсальные сценарии AI" }
-];
-
-// 3 бесплатных ЦЕЛЕВЫХ
-const targetModules = {
-  work: [
-    "AI для офисной работы",
-    "Деловая переписка",
-    "Организация рабочих задач"
-  ],
-  business: [
-    "AI для бизнеса",
-    "Генерация бизнес-идей",
-    "Анализ рынка и ЦА"
-  ],
-  study: [
-    "AI для учёбы",
-    "Конспекты и объяснения",
-    "Самопроверка знаний"
-  ],
-  self: [
-    "AI для повседневной жизни",
-    "Личный AI-помощник",
-    "Планирование и цели"
-  ]
-};
-
-// 14 ПРЕМИУМ
-const premiumModules = {
-  work: [
-    "Продвинутая деловая переписка",
-    "Отчёты и документы PRO",
-    "AI для презентаций",
-    "Анализ рабочих данных",
-    "Автоматизация рутины",
-    "Управление временем",
-    "AI для переговоров",
-    "Исправление и редактирование",
-    "AI-ассистент сотрудника",
-    "Решение сложных задач",
-    "Карьерный рост",
-    "Экспертное мышление",
-    "Повышение эффективности",
-    "Профессиональный уровень AI"
-  ],
-  business: [
-    "Бизнес-мышление с AI",
-    "Проверка гипотез",
-    "Продуктовое мышление",
-    "Маркетинг с AI",
-    "Контент для бизнеса",
-    "Продажи и скрипты",
-    "Воронки и офферы",
-    "Бизнес-планирование",
-    "Автоматизация процессов",
-    "Аналитика и метрики",
-    "Масштабирование",
-    "Стратегии роста",
-    "Управление рисками",
-    "AI для предпринимателя"
-  ],
-  study: [
-    "Глубокое понимание тем",
-    "Подготовка к тестам",
-    "Подготовка к экзаменам",
-    "Индивидуальные планы",
-    "Быстрое запоминание",
-    "Работа с ошибками",
-    "Повторение материала",
-    "Анализ текстов",
-    "Обучение через практику",
-    "Учёба без стресса",
-    "Управление вниманием",
-    "AI-наставник",
-    "Максимальная успеваемость",
-    "Обучение PRO"
-  ],
-  self: [
-    "Личный AI-ассистент PRO",
-    "Продуктивность",
-    "Тайм-менеджмент",
-    "Принятие решений",
-    "Креативное мышление",
-    "Генерация идей",
-    "Планирование жизни",
-    "Цели и привычки",
-    "Саморазвитие",
-    "Анализ информации",
-    "Решение жизненных задач",
-    "Осознанное мышление",
-    "Новые навыки",
-    "Качество жизни"
-  ]
-};
-
-// 10 ДОП (общие)
-const extraModules = [
-  "Лучшие шаблоны промптов",
-  "Частые ошибки пользователей",
-  "Продвинутые техники",
-  "Креативные техники",
-  "AI для идей",
-  "AI для анализа",
-  "Скоростное обучение",
-  "AI как наставник",
-  "Экспертные сценарии",
-  "Максимальная эффективность"
-];
-
-// ---- UI HELPERS ----
 const app = document.getElementById("app");
 
-function clear() {
-  app.innerHTML = "";
-}
+/* =========================
+   ДАННЫЕ
+========================= */
 
-function button(text, onClick, extraClass = "") {
-  const btn = document.createElement("button");
-  btn.className = "btn " + extraClass;
-  btn.textContent = text;
-  btn.onclick = onClick;
-  return btn;
-}
+const goals = [
+  { id: "school", title: "Для школы / института" },
+  { id: "work", title: "Для работы" },
+  { id: "business", title: "Для бизнеса" },
+  { id: "self", title: "Для себя" }
+];
 
-function title(text) {
-  const h = document.createElement("h2");
-  h.textContent = text;
-  return h;
-}
+const modulesByGoal = {
+  school: [
+    {
+      id: "school_free_1",
+      title: "Основы ИИ",
+      lessons: [
+        "Что такое ИИ",
+        "Как работает нейросеть",
+        "Где ИИ используют"
+      ]
+    },
+    {
+      id: "school_free_2",
+      title: "Работа с текстом",
+      lessons: [
+        "ИИ для рефератов",
+        "Краткие конспекты",
+        "Подготовка к экзаменам"
+      ]
+    },
+    {
+      id: "school_free_3",
+      title: "Практика",
+      lessons: [
+        "Решение задач",
+        "Проверка ответов",
+        "Самопроверка"
+      ]
+    }
+  ],
 
-function section(text) {
-  const h = document.createElement("h3");
-  h.textContent = text;
-  return h;
-}
+  work: [
+    {
+      id: "work_free_1",
+      title: "ИИ в работе",
+      lessons: [
+        "ИИ как помощник",
+        "Экономия времени",
+        "Типовые задачи"
+      ]
+    },
+    {
+      id: "work_free_2",
+      title: "Документы",
+      lessons: [
+        "Письма",
+        "Отчёты",
+        "Инструкции"
+      ]
+    },
+    {
+      id: "work_free_3",
+      title: "Практика",
+      lessons: [
+        "Реальные кейсы",
+        "Ошибки",
+        "Оптимизация"
+      ]
+    }
+  ],
 
-// ---- SCREENS ----
+  business: [
+    {
+      id: "business_free_1",
+      title: "ИИ для бизнеса",
+      lessons: [
+        "Автоматизация",
+        "Продажи",
+        "Поддержка"
+      ]
+    },
+    {
+      id: "business_free_2",
+      title: "Контент",
+      lessons: [
+        "Реклама",
+        "Описания",
+        "Сценарии"
+      ]
+    },
+    {
+      id: "business_free_3",
+      title: "Практика",
+      lessons: [
+        "Запуск идей",
+        "Тест гипотез",
+        "Анализ"
+      ]
+    }
+  ],
+
+  self: [
+    {
+      id: "self_free_1",
+      title: "ИИ для себя",
+      lessons: [
+        "Обучение",
+        "Планирование",
+        "Идеи"
+      ]
+    },
+    {
+      id: "self_free_2",
+      title: "Креатив",
+      lessons: [
+        "Тексты",
+        "Истории",
+        "Мышление"
+      ]
+    },
+    {
+      id: "self_free_3",
+      title: "Практика",
+      lessons: [
+        "Личные задачи",
+        "Эксперименты",
+        "Рост"
+      ]
+    }
+  ]
+};
+
+/* =========================
+   РЕНДЕРЫ
+========================= */
 
 function renderStart() {
-  clear();
-  app.appendChild(title("Promt Up"));
-  app.appendChild(
-    button("Начать обучение", () => {
-      state.screen = "goals";
-      render();
-    })
-  );
+  app.innerHTML = `
+    <div class="screen">
+      <h1>PromtUp</h1>
+      <button class="primary" id="startBtn">Начать обучение</button>
+    </div>
+  `;
+
+  document.getElementById("startBtn").onclick = renderGoals;
 }
 
 function renderGoals() {
-  clear();
-  app.appendChild(title("Выбери цель"));
+  app.innerHTML = `
+    <div class="screen">
+      <h2>Выбери цель</h2>
+      <div class="grid">
+        ${goals
+          .map(
+            g => `<button class="card" data-goal="${g.id}">${g.title}</button>`
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
 
-  app.appendChild(button("Для работы", () => selectGoal("work")));
-  app.appendChild(button("Для бизнеса", () => selectGoal("business")));
-  app.appendChild(button("Для учёбы", () => selectGoal("study")));
-  app.appendChild(button("Для себя", () => selectGoal("self")));
+  document.querySelectorAll("[data-goal]").forEach(btn => {
+    btn.onclick = () => renderModules(btn.dataset.goal);
+  });
 }
 
-function selectGoal(goal) {
-  state.goal = goal;
-  state.screen = "modules";
-  render();
+function renderModules(goalId) {
+  const modules = modulesByGoal[goalId];
+
+  app.innerHTML = `
+    <div class="screen">
+      <h2>Модули</h2>
+      <div class="list">
+        ${modules
+          .map(
+            m => `
+          <button class="module" data-module="${m.id}">
+            ${m.title}
+          </button>`
+          )
+          .join("")}
+      </div>
+      <button class="back">← Назад</button>
+    </div>
+  `;
+
+  document.querySelector(".back").onclick = renderGoals;
+
+  document.querySelectorAll("[data-module]").forEach(btn => {
+    const module = modules.find(m => m.id === btn.dataset.module);
+    btn.onclick = () => renderLessons(goalId, module);
+  });
 }
 
-function renderModules() {
-  clear();
+function renderLessons(goalId, module) {
+  app.innerHTML = `
+    <div class="screen">
+      <h2>${module.title}</h2>
+      <div class="list">
+        ${module.lessons
+          .map(
+            (lesson, index) =>
+              `<button class="lesson" data-lesson="${index}">
+                ${lesson}
+              </button>`
+          )
+          .join("")}
+      </div>
+      <button class="back">← К модулям</button>
+    </div>
+  `;
 
-  app.appendChild(title("Модули обучения"));
+  document.querySelector(".back").onclick = () =>
+    renderModules(goalId);
 
-  // Бесплатные — основные
-  app.appendChild(section("Бесплатные • Основы"));
-  baseModules.forEach(m =>
-    app.appendChild(button(m.title, () => alert("Уроки позже")))
-  );
-
-  // Бесплатные — целевые
-  app.appendChild(section("Бесплатные • По цели"));
-  targetModules[state.goal].forEach(m =>
-    app.appendChild(button(m, () => alert("Уроки позже")))
-  );
-
-  // Премиум
-  app.appendChild(section("Премиум"));
-  premiumModules[state.goal].forEach(m =>
-    app.appendChild(button("🔒 " + m, () => alert("Нужен премиум"), "locked"))
-  );
-
-  // Доп
-  app.appendChild(section("Дополнительно за монеты"));
-  extraModules.forEach(m =>
-    app.appendChild(button("🪙 " + m, () => alert("Покупка позже"), "coin"))
-  );
+  document.querySelectorAll("[data-lesson]").forEach(btn => {
+    const index = btn.dataset.lesson;
+    btn.onclick = () =>
+      renderLessonScreen(module.title, module.lessons[index]);
+  });
 }
 
-// ---- RENDER ----
-function render() {
-  if (state.screen === "start") renderStart();
-  if (state.screen === "goals") renderGoals();
-  if (state.screen === "modules") renderModules();
+function renderLessonScreen(moduleTitle, lessonTitle) {
+  app.innerHTML = `
+    <div class="screen">
+      <h2>${lessonTitle}</h2>
+      <p>
+        Это экран урока.<br>
+        Здесь будет теория, примеры и практика.
+      </p>
+      <button class="primary">Перейти к практике</button>
+      <button class="back">← Назад</button>
+    </div>
+  `;
+
+  document.querySelector(".back").onclick = renderStart;
 }
 
-render();
+/* =========================
+   СТАРТ
+========================= */
+
+renderStart();

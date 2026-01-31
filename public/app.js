@@ -1,68 +1,47 @@
-// ===============================
-// Promt Up — Mini App Core Logic
-// ===============================
+// =====================
+// PROMT UP — MINI APP
+// =====================
 
-const app = document.getElementById("app");
-
-// -------------------------------
-// STATE
-// -------------------------------
+// ---- STATE ----
 let state = {
-  goal: null,
   screen: "start", // start | goals | modules
+  goal: null
 };
 
-// -------------------------------
-// DATA — CANON STRUCTURE
-// -------------------------------
+// ---- DATA ----
 
-// 3 FREE BASE MODULES (COMMON)
+// 3 бесплатных ОСНОВНЫХ (общие)
 const baseModules = [
-  {
-    id: "O1",
-    title: "Основы нейросетей",
-    description:
-      "Что такое AI и LLM, возможности, ограничения и почему разные нейросети хороши для разных задач",
-  },
-  {
-    id: "O2",
-    title: "Базовый промпт-инжиниринг",
-    description:
-      "Структура запроса, контекст, роль, формат и исправление ошибок в промптах",
-  },
-  {
-    id: "O3",
-    title: "Универсальные сценарии AI",
-    description:
-      "Генерация, анализ, объяснение, улучшение контента и выбор нейросети под задачу",
-  },
+  { id: "o1", title: "Основы нейросетей" },
+  { id: "o2", title: "Базовый промпт-инжиниринг" },
+  { id: "o3", title: "Универсальные сценарии AI" }
 ];
 
-// 3 FREE TARGET MODULES (PER GOAL)
+// 3 бесплатных ЦЕЛЕВЫХ
 const targetModules = {
   work: [
     "AI для офисной работы",
     "Деловая переписка",
-    "Организация рабочих задач",
+    "Организация рабочих задач"
   ],
   business: [
     "AI для бизнеса",
     "Генерация бизнес-идей",
-    "Анализ рынка и ЦА",
+    "Анализ рынка и ЦА"
   ],
   study: [
     "AI для учёбы",
     "Конспекты и объяснения",
-    "Самопроверка знаний",
+    "Самопроверка знаний"
   ],
   self: [
     "AI для повседневной жизни",
     "Личный AI-помощник",
-    "Планирование и цели",
-  ],
+    "Планирование и цели"
+  ]
 };
 
-// 14 PREMIUM MODULES (PER GOAL)
+// 14 ПРЕМИУМ
 const premiumModules = {
   work: [
     "Продвинутая деловая переписка",
@@ -74,11 +53,11 @@ const premiumModules = {
     "AI для переговоров",
     "Исправление и редактирование",
     "AI-ассистент сотрудника",
-    "Решение сложных рабочих задач",
+    "Решение сложных задач",
     "Карьерный рост",
     "Экспертное мышление",
     "Повышение эффективности",
-    "Профессиональный уровень AI",
+    "Профессиональный уровень AI"
   ],
   business: [
     "Бизнес-мышление с AI",
@@ -94,23 +73,23 @@ const premiumModules = {
     "Масштабирование",
     "Стратегии роста",
     "Управление рисками",
-    "AI для предпринимателя",
+    "AI для предпринимателя"
   ],
   study: [
     "Глубокое понимание тем",
     "Подготовка к тестам",
     "Подготовка к экзаменам",
-    "Индивидуальные планы обучения",
+    "Индивидуальные планы",
     "Быстрое запоминание",
     "Работа с ошибками",
     "Повторение материала",
-    "Анализ учебных текстов",
+    "Анализ текстов",
     "Обучение через практику",
     "Учёба без стресса",
     "Управление вниманием",
-    "Учёба с AI-наставником",
+    "AI-наставник",
     "Максимальная успеваемость",
-    "Обучение на уровне PRO",
+    "Обучение PRO"
   ],
   self: [
     "Личный AI-ассистент PRO",
@@ -125,61 +104,57 @@ const premiumModules = {
     "Анализ информации",
     "Решение жизненных задач",
     "Осознанное мышление",
-    "Обучение новым навыкам",
-    "Улучшение качества жизни",
-  ],
+    "Новые навыки",
+    "Качество жизни"
+  ]
 };
 
-// 10 EXTRA MODULES (COMMON, COINS)
+// 10 ДОП (общие)
 const extraModules = [
   "Лучшие шаблоны промптов",
   "Частые ошибки пользователей",
-  "Продвинутые техники запросов",
+  "Продвинутые техники",
   "Креативные техники",
   "AI для идей",
   "AI для анализа",
   "Скоростное обучение",
   "AI как наставник",
   "Экспертные сценарии",
-  "Максимальная эффективность",
+  "Максимальная эффективность"
 ];
 
-// -------------------------------
-// RENDER HELPERS
-// -------------------------------
-function clearApp() {
+// ---- UI HELPERS ----
+const app = document.getElementById("app");
+
+function clear() {
   app.innerHTML = "";
 }
 
-function button(text, onClick) {
+function button(text, onClick, extraClass = "") {
   const btn = document.createElement("button");
-  btn.className = "btn";
+  btn.className = "btn " + extraClass;
   btn.textContent = text;
   btn.onclick = onClick;
   return btn;
 }
 
-function section(title) {
+function title(text) {
   const h = document.createElement("h2");
-  h.textContent = title;
+  h.textContent = text;
   return h;
 }
 
-// -------------------------------
-// SCREENS
-// -------------------------------
+function section(text) {
+  const h = document.createElement("h3");
+  h.textContent = text;
+  return h;
+}
+
+// ---- SCREENS ----
+
 function renderStart() {
-  clearApp();
-
-  const title = document.createElement("h1");
-  title.textContent = "Promt Up";
-
-  const subtitle = document.createElement("p");
-  subtitle.textContent =
-    "Обучающая платформа по использованию нейросетей под реальные задачи";
-
-  app.appendChild(title);
-  app.appendChild(subtitle);
+  clear();
+  app.appendChild(title("Promt Up"));
   app.appendChild(
     button("Начать обучение", () => {
       state.screen = "goals";
@@ -189,22 +164,13 @@ function renderStart() {
 }
 
 function renderGoals() {
-  clearApp();
+  clear();
+  app.appendChild(title("Выбери цель"));
 
-  app.appendChild(section("Выбери цель обучения"));
-
-  app.appendChild(
-    button("Для работы", () => selectGoal("work"))
-  );
-  app.appendChild(
-    button("Для бизнеса", () => selectGoal("business"))
-  );
-  app.appendChild(
-    button("Для обучения", () => selectGoal("study"))
-  );
-  app.appendChild(
-    button("Для себя", () => selectGoal("self"))
-  );
+  app.appendChild(button("Для работы", () => selectGoal("work")));
+  app.appendChild(button("Для бизнеса", () => selectGoal("business")));
+  app.appendChild(button("Для учёбы", () => selectGoal("study")));
+  app.appendChild(button("Для себя", () => selectGoal("self")));
 }
 
 function selectGoal(goal) {
@@ -214,53 +180,40 @@ function selectGoal(goal) {
 }
 
 function renderModules() {
-  clearApp();
+  clear();
 
-  app.appendChild(section("Бесплатные основные модули"));
+  app.appendChild(title("Модули обучения"));
 
-  baseModules.forEach((m) => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `<strong>${m.title}</strong><p>${m.description}</p>`;
-    app.appendChild(div);
-  });
+  // Бесплатные — основные
+  app.appendChild(section("Бесплатные • Основы"));
+  baseModules.forEach(m =>
+    app.appendChild(button(m.title, () => alert("Уроки позже")))
+  );
 
-  app.appendChild(section("Бесплатные целевые модули"));
+  // Бесплатные — целевые
+  app.appendChild(section("Бесплатные • По цели"));
+  targetModules[state.goal].forEach(m =>
+    app.appendChild(button(m, () => alert("Уроки позже")))
+  );
 
-  targetModules[state.goal].forEach((title) => {
-    const div = document.createElement("div");
-    div.className = "card";
-    div.innerHTML = `<strong>${title}</strong>`;
-    app.appendChild(div);
-  });
+  // Премиум
+  app.appendChild(section("Премиум"));
+  premiumModules[state.goal].forEach(m =>
+    app.appendChild(button("🔒 " + m, () => alert("Нужен премиум"), "locked"))
+  );
 
-  app.appendChild(section("Премиум-модули (доступ по подписке)"));
-
-  premiumModules[state.goal].forEach((title) => {
-    const div = document.createElement("div");
-    div.className = "card locked";
-    div.innerHTML = `<strong>${title}</strong><p>Премиум</p>`;
-    app.appendChild(div);
-  });
-
-  app.appendChild(section("Дополнительные модули за монеты"));
-
-  extraModules.forEach((title) => {
-    const div = document.createElement("div");
-    div.className = "card locked";
-    div.innerHTML = `<strong>${title}</strong><p>За монеты</p>`;
-    app.appendChild(div);
-  });
+  // Доп
+  app.appendChild(section("Дополнительно за монеты"));
+  extraModules.forEach(m =>
+    app.appendChild(button("🪙 " + m, () => alert("Покупка позже"), "coin"))
+  );
 }
 
-// -------------------------------
-// MAIN RENDER
-// -------------------------------
+// ---- RENDER ----
 function render() {
   if (state.screen === "start") renderStart();
   if (state.screen === "goals") renderGoals();
   if (state.screen === "modules") renderModules();
 }
 
-// INIT
 render();
